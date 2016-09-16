@@ -1,7 +1,9 @@
 var Datejs = require('./date.js');
 //Date.js is a JavaScript library to work with dates and times
 
-var Event = function(name,date,duration,location){
+module.exports = {
+
+Event: function(name,date,duration,location){
 	this.name = name; //user defined string
 	this.date = date; //JavaScript Date object, day and time to begin event
 	this.duration = duration; //in minutes, int value
@@ -15,3 +17,5 @@ var Event = function(name,date,duration,location){
 		return (begin + " - " + end);
 	}
 }
+
+};

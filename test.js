@@ -1,6 +1,7 @@
-var fs = require('fs');
+var eventHandler = require('./EventHandler.js');
 
-for(var i=0, i<Events.size
+for(x=0;x<10;x++){
+	eventHandler.addEvent("Sample Event "+x,Date.parse("October "+x+", 2016, "+x+":00pm"),x*10,"Sample Location "+x);
+}
 
-fs.writeFile("Events.txt", test);
-
+console.log(eventHandler.events.length);

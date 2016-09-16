@@ -1,8 +1,21 @@
-var Event = require('Event.js');
+var Event = require('./Event.js');
 
-events = new Array();
+module.exports = {
 
-function addEvent(name,date,duration,location){
-	var newEvent = new Event(name,date,duration,location);
-	events.push(newEvent);
+events: new Array(),
+
+addEvent: function(name,date,duration,location){
+	var newEvent = new Event.Event(name,date,duration,location);
+	module.exports.events.push(newEvent);
+},
+
+searchEvents: function(begin, end){
+	eventsFound = new Array();
+	for(var x=0;x<module.exports.events.length;x++){
+		if(module.exports.events[x].between(begin,end)){
+			eventsFound.push(events[x]);
+		}
+	}
 }
+
+};
