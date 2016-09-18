@@ -8,6 +8,7 @@ Event: function(name,date,duration,location){
 	this.date = date; //JavaScript Date object, day and time to begin event
 	this.duration = duration; //in minutes, int value
 	this.location = location; //user defined string
+	this.id = (new Date().getTime());
 	this.dayToString = function(){
 		return this.date.toString("MMMM d, yyyy")
 	}
