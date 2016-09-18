@@ -19,4 +19,16 @@ searchEvents: function(begin, end){
 	return eventsFound;
 }
 
+deleteEvent: function(idNum){
+  for(var i= 0; i < events.length; i++){
+    if(events[i]['id'] === idNum){
+      var del = events.splice(i, 1);
+      delete del;
+    }
+    else {
+      console.log("error");
+    }
+  }
+}
+
 };
