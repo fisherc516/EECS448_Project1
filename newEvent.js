@@ -3,7 +3,7 @@ fs = require('fs')
 
 //Clears the events.txt file and writes all of the elements in the event array
 //Requires an event array
-function newSave(window.events){
+function newSave(){
 
     fs.writeFile('events.txt', "", (err) => {
         if(err)
@@ -25,7 +25,7 @@ function newSave(window.events){
 
 //Adds a single event on the events.txt file
 //Requires an event array
-function newEvent(window.events)
+function newEvent()
 {
     fs.appendFile('events.txt', window.events.name + "\n" + window.events.date + "\n" + window.events.duration + "\n" + window.events.location + "\n\n", 'utf8', (err) => {
     if(err)
