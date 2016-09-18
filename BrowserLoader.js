@@ -1,4 +1,4 @@
-var eventHandler = require('EventHandler.js');
+var eventHandler = require('./EventHandler.js');
 
 require("jsdom").env("", function(err, window) {
     if (err) {
