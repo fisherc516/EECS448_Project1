@@ -2,6 +2,22 @@
     <head>
         <script src="./bundle.js"></script>
         <style>
+            #nav{
+                display:block;
+                height:50px;
+            }
+            #next{
+                float:right;
+            }
+            #next,#previous{
+                margin:10px;
+                text-decoration:bold;
+                font-family:sans-serif;
+                display:inline-block;
+                border:1px solid blue;
+                padding:7px;
+                background-color:#ddd;
+            }
             table{
                 margin:auto;
                 font-family:sans-serif;
@@ -32,9 +48,13 @@
         </style>
     </head>
     <body>
+        <div id="nav">
+            <a id="previous" href="#">&lt;&lt; Previous Month</a>
+            <a id="next" href="#">Next Month &gt;&gt;</a>
+        </div>
         <table>
             <tr>
-                <th colspan="7" id="title">October 2016</th>
+                <th colspan="7" id="title"></th>
             </tr>
             <tr>
                 <th>Sunday</th>
@@ -45,7 +65,7 @@
                 <th>Friday</th>
                 <th>Saturday</th>
             </tr>
-            <tr>
+            <tr id="w1">
                 <td id="w1d1"></td>
                 <td id="w1d2"></td>
                 <td id="w1d3"></td>
@@ -54,7 +74,7 @@
                 <td id="w1d6"></td>
                 <td id="w1d7"></td>
             </tr>
-            <tr>
+            <tr id="w2">
                 <td id="w2d1"></td>
                 <td id="w2d2"></td>
                 <td id="w2d3"></td>
@@ -63,7 +83,7 @@
                 <td id="w2d6"></td>
                 <td id="w2d7"></td>
             </tr>
-            <tr>
+            <tr id="w3">
                 <td id="w3d1"></td>
                 <td id="w3d2"></td>
                 <td id="w3d3"></td>
@@ -72,7 +92,7 @@
                 <td id="w3d6"></td>
                 <td id="w3d7"></td>
             </tr>
-            <tr>
+            <tr id="w4">
                 <td id="w4d1"></td>
                 <td id="w4d2"></td>
                 <td id="w4d3"></td>
@@ -81,7 +101,7 @@
                 <td id="w4d6"></td>
                 <td id="w4d7"></td>
             </tr>
-            <tr>
+            <tr id="w5">
                 <td id="w5d1"></td>
                 <td id="w5d2"></td>
                 <td id="w5d3"></td>
@@ -89,6 +109,15 @@
                 <td id="w5d5"></td>
                 <td id="w5d6"></td>
                 <td id="w5d7"></td>
+            </tr>
+            <tr id="w6">
+                <td id="w6d1"></td>
+                <td id="w6d2"></td>
+                <td id="w6d3"></td>
+                <td id="w6d4"></td>
+                <td id="w6d5"></td>
+                <td id="w6d6"></td>
+                <td id="w6d7"></td>
             </tr>
         </table>
     </body>

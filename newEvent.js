@@ -1,9 +1,12 @@
 Event = require('./EventHandler.js')
-fs = require('fs')
+fs = require('browserify-fs')
 
 //Clears the events.txt file and writes all of the elements in the event array
 //Requires an event array
-function newSave(window.events){
+
+module.exports = {
+    
+newSave: function(){
 
     fs.writeFile('events.txt', "", (err) => {
         if(err)
@@ -13,6 +16,7 @@ function newSave(window.events){
     })
     for(var i = 0; i < window.events.length; i++)
     {
+        alert('test');
 
         fs.appendFile('events.txt', window.events[i].name + "\n" + window.events[i].date + "\n" + window.events[i].duration + "\n" + window.events[i].location + "\n\n", 'utf8', (err) => {
         if(err)
@@ -21,11 +25,11 @@ function newSave(window.events){
         }
         })
     }
-}
+},
 
 //Adds a single event on the events.txt file
 //Requires an event array
-function newEvent(window.events)
+newEvent: function()
 {
     fs.appendFile('events.txt', window.events.name + "\n" + window.events.date + "\n" + window.events.duration + "\n" + window.events.location + "\n\n", 'utf8', (err) => {
     if(err)
@@ -34,3 +38,5 @@ function newEvent(window.events)
     }
     })
 }
+
+};
