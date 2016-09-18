@@ -1,12 +1,41 @@
-var eventHandler = require('EventHandler.js');
+var test = require('./test.js');
 
-require("jsdom").env("", function(err, window) {
-    if (err) {
-        console.error(err);
-        return;
-    }
+var eventHandler = require('./EventHandler.js');
 
-    var $ = require("jquery")(window);
-});//http://stackoverflow.com/questions/1801160/can-i-use-jquery-with-node-js
+var $ = require('./jquery-3.1.0.min.js');
+window.$ - $;
+window.jQuery = $;
 
+function loadMonth(year,month){
+	var offset = Date.parse(month+" 1 "+year).getDay();
+	var days = Date.getDaysInMonth(year,month);
+	for(w=1;w<=5;w++){
+		for(d=1;d<=7;d++){
+			var day = (w-1)*7+d-offset;
+			if((day>0)&&(day<=days)){
+                var element = $('#w'+w+'d'+d);
+				element.attr('id','d'+day);
+                element = $('#d'+day);
+                element.html('<a>'+day+'</a>');
+			}
+		}
+	}
+	var visibleEvents = eventHandler.searchEvents(Date.parse(month+" 1 "+year+", 12:00am"),Date.parse(month+" "+days+" "+year+", 11:59pm"));
+	for(x=0;x<visibleEvents.length;x++){
+		var day = visibleEvents[x].date.getUTCDate();
+		var time = visibleEvents[x].timeToString();
+		var name = visibleEvents[x].name;
+        var element = $('#d'+day);
+		element.append('<br>'+time+':<br>'+name);
+        console.log(element);
+	}
+}
 
+$(document).ready(function(){
+	var page = document.location.href.match(/[^\/]+$/)[0];
+	switch(page){
+		case 'month.html':
+			loadMonth(2016,10);
+			break;
+	}
+});

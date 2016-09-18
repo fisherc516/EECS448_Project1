@@ -10,12 +10,13 @@ addEvent: function(name,date,duration,location){
 },
 
 searchEvents: function(begin, end){
-	eventsFound = new Array();
+	var eventsFound = new Array();
 	for(var x=0;x<module.exports.events.length;x++){
-		if(module.exports.events[x].between(begin,end)){
-			eventsFound.push(events[x]);
+		if(module.exports.events[x].date.between(begin,end)){
+			eventsFound.push(module.exports.events[x]);
 		}
 	}
+	return eventsFound;
 }
 
 };
