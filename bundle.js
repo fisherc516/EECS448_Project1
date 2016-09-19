@@ -7,12 +7,64 @@ var $ = require('./jquery-3.1.0.min.js');
 window.$ - $;
 window.jQuery = $;
 
+function zeroPad(num, places) {
+  var zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}//http://stackoverflow.com/questions/2998784/how-to-output-integers-with-leading-zeros-in-javascript#2998822
+
+reloadPage = function(){
+    //Save file her
+    window.location.reload();
+}
+
+goToPage = function(url){
+    window.location = url;
+    window.location.reload();
+    return false;
+}
+
+function loadYear(year){
+    for(m=1;m<=12;m++){
+        var month = Date.parse(m+" 1 "+year);
+        $('#m'+m+'title').html(month.toString("MMMM yyyy"));
+        $('#month'+m).attr('href',('month.html#'+year+zeroPad(m,2)));
+        $('#next').attr('onclick','goToPage(\''+'year.html#'+(parseInt(year)+1)+'\')');
+        $('#previous').attr('onclick','goToPage(\''+'year.html#'+(parseInt(year)-1)+'\')');
+        var offset = month.getDay();
+        var days = Date.getDaysInMonth(year,m-1);
+        for(w=1;w<=6;w++){
+            for(d=1;d<=7;d++){
+                var day = (w-1)*7+d-offset;
+                if((day>0)&&(day<=days)){
+                    var element = $('#m'+m+'w'+w+'d'+d);
+                    element.attr('id','m'+m+'d'+day);
+                    element = $('#m'+m+'d'+day);
+                    element.html('<a>'+day+'</a>');
+                }
+            }
+        }
+    }
+}
+
 function loadMonth(year,month){
-	var offset = Date.parse(month+" 1 "+year).getDay();
-	var days = Date.getDaysInMonth(year,month);
-	for(w=1;w<=5;w++){
+    var m = Date.parse(month+" 1 "+year);
+    $('#title').html(m.toString("MMMM yyyy"));
+    var nextMonth = month+1;
+    var nextYear = year;
+    var prevMonth = month-1;
+    var prevYear = year;
+    if(nextMonth==13){nextMonth=1;nextYear++;}
+    if(prevMonth==0){prevMonth=12;prevYear--;}
+    $('#next').attr('onclick','goToPage(\''+'month.html#'+nextYear+zeroPad(nextMonth,2)+'\')');
+    $('#previous').attr('onclick','goToPage(\''+'month.html#'+prevYear+zeroPad(prevMonth,2)+'\')');
+	var offset = m.getDay();
+	var days = Date.getDaysInMonth(year,month-1);
+	for(w=1;w<=6;w++){
 		for(d=1;d<=7;d++){
 			var day = (w-1)*7+d-offset;
+            if(d==1){
+             $('#w'+w).attr('onclick','goToPage(\''+'week.html#'+year+zeroPad(month,2)+zeroPad(day,2)+'\')');
+            }
 			if((day>0)&&(day<=days)){
                 var element = $('#w'+w+'d'+d);
 				element.attr('id','d'+day);
@@ -21,23 +73,43 @@ function loadMonth(year,month){
 			}
 		}
 	}
-	var visibleEvents = eventHandler.searchEvents(Date.parse(month+" 1 "+year+", 12:00am"),Date.parse(month+" "+days+" "+year+", 11:59pm"));
-	for(x=0;x<visibleEvents.length;x++){
-		var day = visibleEvents[x].date.getUTCDate();
-		var time = visibleEvents[x].timeToString();
-		var name = visibleEvents[x].name;
-        var element = $('#d'+day);
-		element.append('<br>'+time+':<br>'+name);
-        console.log(element);
-	}
+}
+
+function loadWeek(year,month,day){
+    var days = Date.getDaysInMonth(year,month-1);
+    alert(days);
+    var date = day;
+    var displayMonth = month;
+    for(d=1;d<=7;d++){
+        if(date>days){
+            date = 1;
+            if(month==12){
+                month=1;
+            }else{
+                month++;
+            }
+        }
+        $('#d'+d).html(month+'/'+date);
+        date++;
+    }
 }
 
 $(document).ready(function(){
 	var page = document.location.href.match(/[^\/]+$/)[0];
+    page = page.substr(0,page.lastIndexOf('#'));
+    var url = window.location.href;
+    var id = url.substring(url.lastIndexOf('#') + 1);
 	switch(page){
+        case 'week.html':
+            alert('test');
+            loadWeek(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)),parseInt(id.substr(6,2)))
+            break;
 		case 'month.html':
-			loadMonth(2016,10);
+			loadMonth(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)));
 			break;
+        case 'year.html':
+            loadYear(id);
+            break;
 	}
 });
 
@@ -52,6 +124,7 @@ Event: function(name,date,duration,location){
 	this.date = date; //JavaScript Date object, day and time to begin event
 	this.duration = duration; //in minutes, int value
 	this.location = location; //user defined string
+	this.id = (new Date().getTime());
 	this.dayToString = function(){
 		return this.date.toString("MMMM d, yyyy")
 	}
@@ -67,23 +140,35 @@ Event: function(name,date,duration,location){
 },{"./date.js":4}],3:[function(require,module,exports){
 var Event = require('./Event.js');
 
-module.exports = {
+window.events = new Array();
 
-events: new Array(),
+module.exports = {
 
 addEvent: function(name,date,duration,location){
 	var newEvent = new Event.Event(name,date,duration,location);
-	module.exports.events.push(newEvent);
+	window.events.push(newEvent);
 },
 
 searchEvents: function(begin, end){
 	var eventsFound = new Array();
-	for(var x=0;x<module.exports.events.length;x++){
-		if(module.exports.events[x].date.between(begin,end)){
-			eventsFound.push(module.exports.events[x]);
+	for(var x=0;x<window.events.length;x++){
+		if(window.events[x].date.between(begin,end)){
+			eventsFound.push(window.events[x]);
 		}
 	}
 	return eventsFound;
+},
+
+deleteEvent: function(idNum){
+  for(var i= 0; i < events.length; i++){
+    if(events[i]['id'] === idNum){
+      var del = events.splice(i, 1);
+      delete del;
+    }
+    else {
+      console.log("error");
+    }
+  }
 }
 
 };
@@ -206,7 +291,4 @@ var eventHandler = require('./EventHandler.js');
 for(x=0;x<10;x++){
 	eventHandler.addEvent("Sample Event "+x,Date.parse("October "+x+", 2016, "+x+":00pm"),x*10,"Sample Location "+x);
 }
-
-console.log(eventHandler.events.length);
-
 },{"./EventHandler.js":3}]},{},[1]);
