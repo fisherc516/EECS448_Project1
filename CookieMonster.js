@@ -1,6 +1,11 @@
-//user clicks add event on certain day which calls the following script and gives
-//the script a  date and time
-
+/**
+*User clicks add event on certain day which calls the following script and gives
+*the script a description of that cookie created
+*
+*@param date the date of the event/cookie being created
+*@param time the time of the event/cookie being created
+*@return  returns the description given by the user input of that event
+*/
 function setCookie(date, time){
   var id = date+"-"+time+"-"+new Date().getTime();
   var name=prompt("Please enter the name of the Event:","");//set name
@@ -14,6 +19,13 @@ function setCookie(date, time){
   return content;// return cookie content to be displayed in day view.
 }
 
+/**
+*Deletes a cookie by making the expire time of the cookie in the past,
+*which tells the computer immediately to delte the cookie with that id
+*
+*@param id the given id of the cookie to be accessed
+*@return nothing
+*/
 function deleteCookie(id){
   var d = new Date();;
   d.setTime(d.getTime() + (-1*24*60*60*1000))
@@ -21,6 +33,13 @@ function deleteCookie(id){
   document.cookie = id+"="+""+"; "+expires;
 }
 
+/**
+*Creates a cookie that is labled as the most recently viewed if the webpage
+*has been closed.
+*
+*@param none
+*@return none
+*/
 function lastView(){
   var content = window.location.href;
   var id = "LastView";
@@ -30,7 +49,13 @@ function lastView(){
   document.cookie = id+"="+content+"; "+expires;// create cookie
 }
 
-//
+/**
+*Looks for specific cookies that has the id of the date passed through the
+*parameters. It then gives the html the id of the cookie and the cookie's value.
+
+*@param date the id of a speific cookie(s)
+*@return none
+*/
 function getCookie(date) {
     var doc = document.cookie.split(';');
     for(var i=0; i<doc.length; i++) {
