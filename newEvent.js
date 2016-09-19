@@ -1,5 +1,5 @@
 Event = require('./EventHandler.js');
-fs = require('fs');
+fs = require('browserify-fs');
 
 //Clears the events.txt file and writes all of the elements in the event array
 //Requires an event array
