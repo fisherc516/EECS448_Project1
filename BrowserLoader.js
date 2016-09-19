@@ -1,6 +1,8 @@
 var test = require('./test.js');
 
-var eventHandler = require('./EventHandler.js');
+window.cookies = require('./CookieMonster.js');
+
+window.cookies.lastView();
 
 var $ = require('./jquery-3.1.0.min.js');
 window.$ - $;
@@ -116,7 +118,7 @@ function loadWeek(year,month,day){
 
 function loadDay(year,month,day){
     var thisDay = Date.parse(month+'/'+day+'/'+year);
-    console.log(thisDay);
+    window.date = thisDay.toString('MMddyyyy');
     var previous = Date.parse(thisDay.toString('MMMM d yyyy'));;
     var next = Date.parse(thisDay.toString('MMMM d yyyy'));
     previous.addDays(-1);
@@ -128,6 +130,11 @@ function loadDay(year,month,day){
     var offset = startOfWeek.getDay();
     startOfWeek.addDays(0-offset);
     $('#back').attr('onclick','goToNewPage(\''+'week.html#'+year.toString()+zeroPad(month.toString(),2)+zeroPad(startOfWeek.getDate(),2)+'\')');
+    var times = ['12AM','1AM','2AM','3AM','4AM','5AM','6AM','7AM','8AM','9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM','6PM','7PM','8PM','9PM','10PM','11PM'];
+    for(x=1;x<=24;x++){
+        $('#add'+x).attr('onclick','cookies.setCookie(\''+window.date+'\',\''+times[x-1]+'\')');
+    }
+    cookies.getCookie(window.date);
 }
 
 $(document).ready(function(){
@@ -146,8 +153,10 @@ $(document).ready(function(){
             loadYear(id);
             break;
         case 'day.html':
-            console.log('day run');
             loadDay(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)),parseInt(id.substr(6,2)));
+            break;
+        case 'start.html':
+            
             break;
 	}
 });

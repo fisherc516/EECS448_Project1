@@ -1,0 +1,55 @@
+<<<<<<< HEAD
+Event = require('./EventHandler.js')
+fs = require('browserify-fs')
+
+//Clears the events.txt file and writes all of the elements in the event array
+//Requires an event array
+
+module.exports = {
+    
+newSave: function(){
+=======
+Event = require('./EventHandler.js');
+fs = require('fs');
+
+//Clears the events.txt file and writes all of the elements in the event array
+//Requires an event array
+function newSave(){
+>>>>>>> 6343ee75fd8e224926e249f2381409d9e0696578
+
+    fs.writeFile('events.txt', "", (err) => {
+        if(err)
+        {
+            return console.log(err);
+        }
+    })
+    for(var i = 0; i < window.events.length; i++)
+    {
+        alert('test');
+
+        fs.appendFile('events.txt', window.events[i].name + "\n" + window.events[i].date + "\n" + window.events[i].duration + "\n" + window.events[i].location + "\n\n", 'utf8', (err) => {
+        if(err)
+        {
+            return console.log(err);
+        }
+        })
+    }
+},
+
+//Adds a single event on the events.txt file
+//Requires an event array
+<<<<<<< HEAD
+newEvent: function()
+=======
+function newEvent()
+>>>>>>> 6343ee75fd8e224926e249f2381409d9e0696578
+{
+    fs.appendFile('events.txt', window.events.name + "\n" + window.events.date + "\n" + window.events.duration + "\n" + window.events.location + "\n\n", 'utf8', (err) => {
+    if(err)
+    {
+        return console.log(err);
+    }
+    })
+}
+
+};
