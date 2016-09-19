@@ -1,8 +1,8 @@
 var Event = require('./Event.js');
 
-module.exports = {
+window.events = new Array();
 
-window.events = newArray();
+module.exports = {
 
 addEvent: function(name,date,duration,location){
 	var newEvent = new Event.Event(name,date,duration,location);
@@ -17,7 +17,7 @@ searchEvents: function(begin, end){
 		}
 	}
 	return eventsFound;
-}
+},
 
 deleteEvent: function(idNum){
   for(var i= 0; i < events.length; i++){
