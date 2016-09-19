@@ -21,7 +21,7 @@ function setCookie(date, time){
 
 /**
 *Deletes a cookie by making the expire time of the cookie in the past,
-*which tells the computer immediately to delte the cookie with that id
+*which tells the computer immediately to Delete the cookie with that id
 *
 *@param id the given id of the cookie to be accessed
 *@return nothing
