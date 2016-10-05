@@ -74,7 +74,7 @@ function loadMonth(year,month){
                 }
             }
             if(d==1){
-             $('#w'+w).attr('onclick','goToNewPage(\''+'week.html#'+year+zeroPad(month,2)+zeroPad(urlDay,2)+'\')');
+             $('#w'+w).attr('onclick','goToNewPage(\''+'week.html#'+year+zeroPad(month,2)+w+zeroPad(urlDay,2)+'\')');
             }
 			if((day>0)&&(day<=days)){
                 var element = $('#w'+w+'d'+d);
@@ -86,12 +86,28 @@ function loadMonth(year,month){
 	}
 }
 
-function loadWeek(year,month,day){
+function loadWeek(year,month,week,day){
     var days = Date.getDaysInMonth(year,month-1);
     var date = day;
     var displayMonth = month;
-    var begin = Date.parse(month+'/'+day+'/'+year);
-    var end = Date.parse(begin.toString('MMMM d yyyy'));
+    var weekNumber = week;
+    if(week == 1 && day > 7)
+    {
+	if(month > 1)
+	{
+    	    var begin = Date.parse(month-1+'/'+day+'/'+year);
+	}
+	else
+	{
+	    var begin = Date.parse(12+'/'+day+'/'+year);
+	}
+    	var end = Date.parse(begin.toString('MMMM d yyyy'));
+    }
+    else
+    {
+	var begin = Date.parse(month+'/'+day+'/'+year);
+    	var end = Date.parse(begin.toString('MMMM d yyyy')); 
+    }
     end.addDays(6);
     var previous = Date.parse(begin.toString('MMMM d yyyy'));;
     var next = Date.parse(begin.toString('MMMM d yyyy'));
@@ -145,11 +161,11 @@ $(document).ready(function(){
     var id = url.substring(url.lastIndexOf('#') + 1);
 	switch(page){
         case 'week.html':
-            loadWeek(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)),parseInt(id.substr(6,2)))
+            loadWeek(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)),parseInt(id.substr(6,1)),parseInt(id.substr(7,2)))
             break;
-		case 'month.html':
-			loadMonth(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)));
-			break;
+	case 'month.html':
+		loadMonth(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)));
+		break;
         case 'year.html':
             loadYear(id);
             break;
