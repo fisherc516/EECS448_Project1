@@ -89,33 +89,62 @@ function loadMonth(year,month){
 function loadWeek(year,month,week,day){
     var days = Date.getDaysInMonth(year,month-1);
     var date = day;
-    var displayMonth = month;
     var weekNumber = week;
-    if(week == 1 && day > 7)
-    {
-	if(month > 1)
-	{
-    	    var begin = Date.parse(month-1+'/'+day+'/'+year);
-	}
-	else
-	{
-	    var begin = Date.parse(12+'/'+day+'/'+year);
-	}
-    	var end = Date.parse(begin.toString('MMMM d yyyy'));
-    }
-    else
-    {
-	var begin = Date.parse(month+'/'+day+'/'+year);
-    	var end = Date.parse(begin.toString('MMMM d yyyy')); 
-    }
+    var displayMonth = month;
+    var begin = Date.parse(month+'/'+day+'/'+year);
+    var end = Date.parse(begin.toString('MMMM d yyyy'));
     end.addDays(6);
+    //------------------------------------
+    if(begin.getDate() > end.getDate() && week == 1)
+    {
+	begin = Date.parse((month-1)+'/'+day+'/'+year);
+	end = Date.parse(begin.toString('MMMM d yyyy'));
+	end.addDays(6);
+    }
+    //------------------------------------
     var previous = Date.parse(begin.toString('MMMM d yyyy'));;
     var next = Date.parse(begin.toString('MMMM d yyyy'));
     previous.addDays(-7);
     next.addDays(7);
+    /*Next week: week++ (5->1)
+    * if # days in month = 30 & first day of month started on Sat, then week -> 6, else week -> 1
+    * if # days in month = 31 & first day of month started on Fri/Sat, then week -> 6, else week -> 1
+    *Previous week: week-- (1->5)
+    * if # days in previous month = 30 & first day of previous month started on Sat, then week -> 6, else week -> 5
+    * if # days in previous month = 31 & first day of previous month started on Fri/Sat, then week -> 6, else week -> 5
+    */
+    var nextWeek = weekNumber++;
+    var prevWeek = weekNumber--;
+    if(nextWeek == 6)
+    {
+	var firstDay = Date.parse(month+'/1/'+year);
+	if(Date.getDaysInMonth(year,month-1) == 30 && firstDay.getDay() == 6){}
+	else if(Date.getDaysInMonth(year,month-1) == 31 && firstDay.getDay() == 6 || firstDay.getDay() == 5){}
+	else
+	{
+		nextWeek = 1;
+	}
+    }
+    if(prevWeek == 0)
+    {
+	var lastMonthFirstDay = Date.parse((month-1)+'/1/'+year);
+	if(Date.getDaysInMonth(year,month-2) == 30 && firstDay.getDay() == 6)
+	{
+		prevWeek = 6;
+	}
+	else if(Date.getDaysInMonth(year,month-1) == 31 && firstDay.getDay() == 6 || firstDay.getDay() == 5)
+	{
+		prevWeek = 6;
+	}
+	else
+	{
+		prevWeek = 5;
+	}
+    }
+    //-------------------------------------
     $('#title').html(begin.toString('MMMM d')+' - '+end.toString('MMMM d'));
-    $('#next').attr('onclick','goToSamePage(\''+'week.html#'+(next.getYear()+1900)+zeroPad(next.getMonth()+1,2)+zeroPad(next.getDate(),2)+'\')');
-    $('#previous').attr('onclick','goToSamePage(\''+'week.html#'+(previous.getYear()+1900)+zeroPad(previous.getMonth()+1,2)+zeroPad(previous.getDate(),2)+'\')');
+    $('#next').attr('onclick','goToSamePage(\''+'week.html#'+(next.getYear()+1900)+zeroPad(next.getMonth()+1,2)+nextWeek+zeroPad(next.getDate(),2)+'\')');
+    $('#previous').attr('onclick','goToSamePage(\''+'week.html#'+(previous.getYear()+1900)+zeroPad(previous.getMonth()+1,2)+prevWeek+zeroPad(previous.getDate(),2)+'\')');
     $('#back').attr('onclick','goToNewPage(\''+'month.html#'+year.toString()+month.toString()+'\')');
     
     for(d=1;d<=7;d++){
@@ -161,7 +190,7 @@ $(document).ready(function(){
     var id = url.substring(url.lastIndexOf('#') + 1);
 	switch(page){
         case 'week.html':
-            loadWeek(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)),parseInt(id.substr(6,1)),parseInt(id.substr(7,2)))
+            loadWeek(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)),parseInt(id.substr(6,1)),parseInt(id.substr(7,2)));
             break;
 	case 'month.html':
 		loadMonth(parseInt(id.substr(0,4)),parseInt(id.substr(4,2)));
